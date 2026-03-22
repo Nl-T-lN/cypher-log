@@ -5,6 +5,7 @@
     height: 200px;
     position: fixed;
     margin-top: -100px;
+    z-index: 100;
 }
 
 .stick_follow_icon ul {
@@ -64,6 +65,7 @@
         padding: 40px 0;
         align-items: center;
     }
+
     .stick_follow_icon p {
         top: unset;
         left: unset;
@@ -75,9 +77,11 @@
         font-size: 17px;
         margin-right: 65px;
     }
+
     .stick_follow_icon ul {
         margin-bottom: 20px;
     }
+
     .stick_follow_icon ul li {
         display: inline;
         margin-bottom: 29px;

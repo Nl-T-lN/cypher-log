@@ -1,109 +1,249 @@
-import React, { useState } from "react";
+import React, { useLayoutEffect, useRef, useState } from "react";
 import "./style.css";
-import { VscGrabber, VscClose } from "react-icons/vsc";
-import { Link } from "react-router-dom";
-import { logotext ,socialprofils } from "../content_option";
+import { gsap } from "gsap";
+import { GoArrowUpRight } from "react-icons/go";
+import { logotext, socialprofils } from "../content_option";
 import Themetoggle from "../components/themetoggle";
-import pandaLogo from "../assets/images/Pandablackbg.png";
 import useScrollSpy from "../hooks/useScrollSpy";
 
+const NAV_ITEMS = [
+  {
+    label: "Navigate",
+    bgColor: "var(--secondary-color)",
+    textColor: "var(--bg-color)",
+    links: [
+      { label: "Home", sectionId: "home" },
+      { label: "About", sectionId: "about" },
+    ],
+  },
+  {
+    label: "Work",
+    bgColor: "var(--text-color-3)",
+    textColor: "var(--bg-color)",
+    links: [
+      { label: "Projects", sectionId: "portfolio" },
+      { label: "Contact", sectionId: "contact" },
+    ],
+  },
+  {
+    label: "Connect",
+    bgColor: "var(--primary-color)",
+    textColor: "var(--text-color)",
+    links: [
+      ...(socialprofils.github
+        ? [{ label: "GitHub", href: socialprofils.github }]
+        : []),
+      ...(socialprofils.linkedin
+        ? [{ label: "LinkedIn", href: socialprofils.linkedin }]
+        : []),
+    ],
+  },
+];
+
 const Headermain = () => {
-  const [isActive, setActive] = useState("false");
-  const sectionIds = ['home', 'about', 'portfolio', 'contact'];
+  const [isOpen, setIsOpen] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(false);
+  const navRef = useRef(null);
+  const cardsRef = useRef([]);
+  const tlRef = useRef(null);
+
+  const sectionIds = ["home", "about", "portfolio", "contact"];
   const activeSection = useScrollSpy(sectionIds, 150);
 
-  const handleToggle = () => {
-    setActive(!isActive);
-    document.body.classList.toggle("ovhidden");
+  const calculateHeight = () => {
+    const navEl = navRef.current;
+    if (!navEl) return 280;
+    const isMobile = window.matchMedia("(max-width: 768px)").matches;
+    if (isMobile) {
+      const contentEl = navEl.querySelector(".cardnav__content");
+      if (contentEl) {
+        const prev = {
+          vis: contentEl.style.visibility,
+          pe: contentEl.style.pointerEvents,
+          pos: contentEl.style.position,
+          h: contentEl.style.height,
+        };
+        contentEl.style.visibility = "visible";
+        contentEl.style.pointerEvents = "auto";
+        contentEl.style.position = "static";
+        contentEl.style.height = "auto";
+        void contentEl.offsetHeight;
+        const total = 60 + contentEl.scrollHeight + 16;
+        contentEl.style.visibility = prev.vis;
+        contentEl.style.pointerEvents = prev.pe;
+        contentEl.style.position = prev.pos;
+        contentEl.style.height = prev.h;
+        return total;
+      }
+    }
+    return 280;
+  };
+
+  const createTimeline = () => {
+    const navEl = navRef.current;
+    if (!navEl) return null;
+    gsap.set(navEl, { height: 60, overflow: "hidden" });
+    gsap.set(cardsRef.current, { y: 50, opacity: 0 });
+    const tl = gsap.timeline({ paused: true });
+    tl.to(navEl, {
+      height: calculateHeight,
+      duration: 0.4,
+      ease: "power3.out",
+    });
+    tl.to(
+      cardsRef.current,
+      { y: 0, opacity: 1, duration: 0.4, ease: "power3.out", stagger: 0.08 },
+      "-=0.1"
+    );
+    return tl;
+  };
+
+  useLayoutEffect(() => {
+    const tl = createTimeline();
+    tlRef.current = tl;
+    return () => {
+      tl?.kill();
+      tlRef.current = null;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useLayoutEffect(() => {
+    const handleResize = () => {
+      if (!tlRef.current) return;
+      if (isExpanded) {
+        const h = calculateHeight();
+        gsap.set(navRef.current, { height: h });
+        tlRef.current.kill();
+        const newTl = createTimeline();
+        if (newTl) {
+          newTl.progress(1);
+          tlRef.current = newTl;
+        }
+      } else {
+        tlRef.current.kill();
+        const newTl = createTimeline();
+        if (newTl) tlRef.current = newTl;
+      }
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isExpanded]);
+
+  const toggleMenu = () => {
+    const tl = tlRef.current;
+    if (!tl) return;
+    if (!isExpanded) {
+      setIsOpen(true);
+      setIsExpanded(true);
+      tl.play(0);
+    } else {
+      setIsOpen(false);
+      tl.eventCallback("onReverseComplete", () => setIsExpanded(false));
+      tl.reverse();
+    }
   };
 
   const scrollToSection = (sectionId) => {
-    const element = document.getElementById(sectionId);
-    if (element) {
-      element.scrollIntoView({ 
-        behavior: 'smooth',
-        block: 'start'
-      });
+    const el = document.getElementById(sectionId);
+    if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+    // close menu
+    if (isExpanded) {
+      setIsOpen(false);
+      tlRef.current?.eventCallback("onReverseComplete", () =>
+        setIsExpanded(false)
+      );
+      tlRef.current?.reverse();
     }
-    // Close menu after clicking
-    setActive("false");
-    document.body.classList.remove("ovhidden");
+  };
+
+  const setCardRef = (i) => (el) => {
+    if (el) cardsRef.current[i] = el;
   };
 
   return (
     <>
-      <header className="fixed-top site__header">
-        <div className="d-flex align-items-center justify-content-between">
-          <button 
-            className="navbar-brand nav_ac logo-scroll-btn" 
-            onClick={() => scrollToSection('home')}
-          >
-            <span className="logo-text">{logotext}</span>
-          </button>
-          <div className="d-flex align-items-center">
-          <Themetoggle />
-          <button className="menu__button  nav_ac" onClick={handleToggle}>
-            {!isActive ? <VscClose /> : <VscGrabber />}
-          </button>
-          
-          </div>
-        </div>
+      <div className="cardnav__container">
+        <nav
+          ref={navRef}
+          className={`cardnav ${isExpanded ? "cardnav--open" : ""}`}
+        >
+          {/* Top bar */}
+          <div className="cardnav__top">
+            <div
+              className={`cardnav__hamburger ${isOpen ? "cardnav__hamburger--open" : ""}`}
+              onClick={toggleMenu}
+              role="button"
+              aria-label={isExpanded ? "Close menu" : "Open menu"}
+              tabIndex={0}
+            >
+              <div className="cardnav__hamburger-line" />
+              <div className="cardnav__hamburger-line" />
+            </div>
 
-        <div className={`site__navigation ${!isActive ? "menu__opend" : ""}`}>
-          <div className="bg__menu h-100">
-            <div className="menu__wrapper">
-              <div className="menu__container p-3">
-                <ul className="the_menu">
-                  <li className="menu_item ">
-                    <button 
-                      onClick={() => scrollToSection('home')} 
-                      className={`nav-scroll-btn my-3 ${activeSection === 'home' ? 'active' : ''}`}
-                    >
-                      Home
-                    </button>
-                  </li>
-                  <li className="menu_item">
-                    <button 
-                      onClick={() => scrollToSection('about')} 
-                      className={`nav-scroll-btn my-3 ${activeSection === 'about' ? 'active' : ''}`}
-                    >
-                      About
-                    </button>
-                  </li>
-                  <li className="menu_item">
-                    <button 
-                      onClick={() => scrollToSection('portfolio')} 
-                      className={`nav-scroll-btn my-3 ${activeSection === 'portfolio' ? 'active' : ''}`}
-                    >
-                      Projects
-                    </button>
-                  </li>
-                  <li className="menu_item">
-                    <button 
-                      onClick={() => scrollToSection('contact')} 
-                      className={`nav-scroll-btn my-3 ${activeSection === 'contact' ? 'active' : ''}`}
-                    >
-                      Contact
-                    </button>
-                  </li>
-                </ul>
+            <button
+              className="cardnav__logo"
+              onClick={() => scrollToSection("home")}
+            >
+              {logotext}
+            </button>
+
+            <Themetoggle />
+          </div>
+
+          {/* Cards content */}
+          <div
+            className={`cardnav__content ${isExpanded ? "cardnav__content--visible" : ""}`}
+            aria-hidden={!isExpanded}
+          >
+            {NAV_ITEMS.map((item, idx) => (
+              <div
+                key={idx}
+                className="cardnav__card"
+                ref={setCardRef(idx)}
+                style={{
+                  backgroundColor: item.bgColor,
+                  color: item.textColor,
+                }}
+              >
+                <div className="cardnav__card-label">{item.label}</div>
+                <div className="cardnav__card-links">
+                  {item.links.map((lnk, i) =>
+                    lnk.sectionId ? (
+                      <button
+                        key={i}
+                        className={`cardnav__card-link ${activeSection === lnk.sectionId ? "cardnav__card-link--active" : ""}`}
+                        onClick={() => scrollToSection(lnk.sectionId)}
+                        style={{ color: "inherit" }}
+                      >
+                        <GoArrowUpRight className="cardnav__card-link-icon" />
+                        {lnk.label}
+                      </button>
+                    ) : (
+                      <a
+                        key={i}
+                        className="cardnav__card-link"
+                        href={lnk.href}
+                        target="_blank"
+                        rel="noreferrer"
+                        style={{ color: "inherit" }}
+                      >
+                        <GoArrowUpRight className="cardnav__card-link-icon" />
+                        {lnk.label}
+                      </a>
+                    )
+                  )}
+                </div>
               </div>
-            </div>
+            ))}
           </div>
-          <div className="menu_footer d-flex flex-column flex-md-row justify-content-between align-items-md-center position-absolute w-100 p-3">
-            <div className="d-flex">
-            {socialprofils.github && <a href={socialprofils.github}>Github</a>}
-            {socialprofils.linkedin && <a href={socialprofils.linkedin}>LinkedIn</a>}
-            </div>
-            <p className="copyright m-0">© 2025 {logotext}</p>
-          </div>
-        </div>
-      </header>
+        </nav>
+      </div>
       <div className="br-top"></div>
       <div className="br-bottom"></div>
       <div className="br-left"></div>
       <div className="br-right"></div>
-      
     </>
   );
 };

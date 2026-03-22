@@ -45,12 +45,6 @@
     color: var(--text-color);
 }
 
-@-webkit-keyframes animate-positive {
-    0% {
-        width: 0%;
-    }
-}
-
 @keyframes animate-positive {
     0% {
         width: 0%;
@@ -70,104 +64,202 @@
     padding-bottom: 4px;
 }
 
-
-/*! CSS Used keyframes */
-
-@-webkit-keyframes fadeInUp {
-    0% {
-        opacity: 0;
-        -webkit-transform: translate3d(0, 100%, 0);
-        transform: translate3d(0, 100%, 0);
-    }
-    to {
-        opacity: 1;
-        -webkit-transform: translateZ(0);
-        transform: translateZ(0);
-    }
-}
-
 @keyframes fadeInUp {
     0% {
         opacity: 0;
-        -webkit-transform: translate3d(0, 100%, 0);
         transform: translate3d(0, 100%, 0);
     }
+
     to {
         opacity: 1;
-        -webkit-transform: translateZ(0);
         transform: translateZ(0);
     }
 }
 
-/* Skills Container Styles */
-.skill-category-title {
-    font-size: 1.5rem; /* Or h3 equivalent */
-    font-weight: 500;
+/* =============================================
+   TECHNOLOGY STACK — Title
+   ============================================= */
+.techstack-title {
+    font-size: 2.4rem;
+    font-weight: 700;
+    font-family: Marcellus, serif;
     color: var(--text-color);
-    margin-top: 2rem;
-    margin-bottom: 1rem;
-    border-bottom: 1px solid var(--secondary); /* Optional subtle separator */
-    padding-bottom: 0.5rem;
+    margin-bottom: 0.4rem;
 }
 
-.skills-list {
+.techstack-subtitle {
+    font-size: 0.95rem;
+    color: var(--text-color);
+    opacity: 0.5;
+    margin-bottom: 3rem;
+    font-family: 'Raleway', sans-serif;
+}
+
+/* =============================================
+   TECHNOLOGY STACK — Grid
+   ============================================= */
+.techstack-grid {
     display: flex;
     flex-wrap: wrap;
-    gap: 12px;
-    padding: 0;
-    margin-bottom: 2rem; /* Space before the next category */
+    justify-content: center;
+    gap: 28px;
+    padding: 0 0 2rem;
 }
 
-.skill-item {
-    display: inline-flex;
+/* =============================================
+   CIRCLE — Individual Icon
+   ============================================= */
+.techstack-circle {
+    display: flex;
+    flex-direction: column;
     align-items: center;
-    padding: 6px 14px;
-    background-color: #222; /* Dark background for the pill */
-    border: 1px solid #333; /* Subtle border */
-    border-radius: 20px; /* This creates the pill shape */
-    transition: background-color 0.3s ease, transform 0.2s ease;
-    color: var(--text-color-2, #ccc);
-    font-size: 0.9rem;
+    gap: 12px;
+    cursor: none;
+}
+
+.techstack-circle__inner {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    position: relative;
+}
+
+.techstack-circle__inner i {
+    font-size: 2.4rem;
+    color: var(--text-color);
+    filter: grayscale(1) brightness(1.8);
+    transition: filter 0.4s ease, transform 0.4s ease;
+}
+
+.techstack-circle__emoji {
+    font-size: 2rem;
+    filter: grayscale(0.6);
+    transition: filter 0.4s ease, transform 0.4s ease;
+}
+
+/* Hover — subtle color reveal */
+.techstack-circle:hover .techstack-circle__inner {
+    background: rgba(255, 255, 255, 0.07);
+    border-color: rgba(255, 255, 255, 0.15);
+    transform: scale(1.06);
+}
+
+.techstack-circle:hover .techstack-circle__inner i {
+    filter: grayscale(0) brightness(1);
+    transform: scale(1.1);
+}
+
+.techstack-circle:hover .techstack-circle__emoji {
+    filter: grayscale(0);
+    transform: scale(1.15);
+}
+
+/* Label */
+.techstack-circle__label {
+    font-size: 0.72rem;
     font-weight: 500;
+    color: var(--text-color);
+    opacity: 0.4;
+    text-align: center;
+    font-family: 'Raleway', sans-serif;
+    letter-spacing: 0.03em;
+    transition: opacity 0.3s ease;
 }
 
-.skill-item:hover {
-    background-color: #333; /* Lighter on hover */
-    transform: translateY(-2px); /* Slight lift effect */
-    cursor: default; /* Not a link, so default cursor */
+.techstack-circle:hover .techstack-circle__label {
+    opacity: 0.8;
 }
 
-.skill-icon {
-    width: 20px;
-    height: 20px;
-    margin-right: 10px;
-    filter: grayscale(30%); /* Optional: makes icons less vibrant to match theme */
+/* =============================================
+   ORBIT RING — Dashed gold circle on every 3rd
+   ============================================= */
+.techstack-circle--orbit .techstack-circle__inner::before {
+    content: '';
+    position: absolute;
+    top: -8px;
+    left: -8px;
+    right: -8px;
+    bottom: -8px;
+    border-radius: 50%;
+    border: 1px dashed rgba(200, 170, 80, 0.35);
+    animation: orbitSpin 20s linear infinite;
+    pointer-events: none;
 }
 
-.skill-button:hover::before {
+@keyframes orbitSpin {
+    from {
+        transform: rotate(0deg);
+    }
 
-    left: 100%;
-
+    to {
+        transform: rotate(360deg);
+    }
 }
 
-/* Responsive Design */
+/* =============================================
+   LIGHT THEME
+   ============================================= */
+[data-theme="light"] .techstack-circle__inner {
+    background: rgba(0, 0, 0, 0.03);
+    border-color: rgba(0, 0, 0, 0.08);
+}
+
+[data-theme="light"] .techstack-circle__inner i {
+    filter: grayscale(1) brightness(0.4);
+}
+
+[data-theme="light"] .techstack-circle:hover .techstack-circle__inner {
+    background: rgba(0, 0, 0, 0.06);
+    border-color: rgba(0, 0, 0, 0.15);
+}
+
+[data-theme="light"] .techstack-circle:hover .techstack-circle__inner i {
+    filter: grayscale(0) brightness(1);
+}
+
+[data-theme="light"] .techstack-circle--orbit .techstack-circle__inner::before {
+    border-color: rgba(160, 130, 50, 0.3);
+}
+
+/* =============================================
+   RESPONSIVE
+   ============================================= */
 @media (max-width: 768px) {
-    .skills-container {
-        grid-template-columns: 1fr;
-        gap: 15px;
+    .techstack-grid {
+        gap: 18px;
     }
-    
-    .skill-button {
-        padding: 15px;
+
+    .techstack-circle__inner {
+        width: 75px;
+        height: 75px;
     }
-    
-    .skill-logo {
-        font-size: 2rem;
-        min-width: 50px;
-        height: 50px;
+
+    .techstack-circle__inner i {
+        font-size: 1.8rem;
     }
-    
-    .skill-name {
-        font-size: 1.1rem;
+
+    .techstack-circle__emoji {
+        font-size: 1.5rem;
+    }
+
+    .techstack-circle__label {
+        font-size: 0.62rem;
+    }
+
+    .techstack-title {
+        font-size: 1.8rem;
+    }
+
+    .techstack-circle--orbit .techstack-circle__inner::before {
+        top: -6px;
+        left: -6px;
+        right: -6px;
+        bottom: -6px;
     }
 }

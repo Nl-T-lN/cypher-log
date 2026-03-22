@@ -31,75 +31,46 @@ const worktimeline = [
 
 const skills = [
     // Languages
-    {
-        name: "Python",
-        icon: "/icons/python.svg", // Example path - create an 'icons' folder in your 'public' directory
-        category: "Languages"
-    },
-    
-    {
-        name: "JavaScript",
-        icon: "/icons/javascript.svg",
-        category: "Languages"
-    },
-    {
-        name: "C",
-        icon: "/icons/C.svg",
-        category: "Languages"
-    },
-    {
-        name: "C++",
-        icon: "/icons/Cpp.svg",
-        category: "Languages"
-    },
-    // Offensive Security Tools
-    {
-        name: "Burp Suite",
-        icon: "/icons/burpsuite.svg",
-        category: "Offensive Security Tools"
-    },
-    {
-        name: "Metasploit",
-        icon: "/icons/metasploit.svg",
-        category: "Offensive Security Tools"
-    },
-    {
-        name: "Nmap",
-        icon: "/icons/nmap.svg",
-        category: "Offensive Security Tools"
-    },
-    {
-        name: "Hydra",
-        icon: "/icons/hydra.png", 
-        category: "Offensive Security Tools"
-    },
-    // Analysis & Forensics
-    {
-        name: "Wireshark",
-        icon: "/icons/wireshark.svg",
-        category: "Analysis & Forensics"
-    },
-    {
-        name: "Ghidra", 
-        icon: "/icons/ghidra.svg", 
-        category: "Analysis & Forensics"
-    },
+    { name: "Python", icon: "devicon-python-plain colored", category: "Languages" },
+    { name: "JavaScript", icon: "devicon-javascript-plain colored", category: "Languages" },
+    { name: "TypeScript", icon: "devicon-typescript-plain colored", category: "Languages" },
+    { name: "C", icon: "devicon-c-plain colored", category: "Languages" },
+    { name: "C++", icon: "devicon-cplusplus-plain colored", category: "Languages" },
+    { name: "Java", icon: "devicon-java-plain colored", category: "Languages" },
+    { name: "Kotlin", icon: "devicon-kotlin-plain colored", category: "Languages" },
+    { name: "Swift", icon: "devicon-swift-plain colored", category: "Languages" },
+
+    // Frontend
+    { name: "React", icon: "devicon-react-original colored", category: "Frontend" },
+    { name: "Next.js", icon: "devicon-nextjs-plain", category: "Frontend" },
+    { name: "HTML5", icon: "devicon-html5-plain colored", category: "Frontend" },
+    { name: "CSS3", icon: "devicon-css3-plain colored", category: "Frontend" },
+    { name: "Tailwind", icon: "devicon-tailwindcss-original colored", category: "Frontend" },
+    { name: "Bootstrap", icon: "devicon-bootstrap-plain colored", category: "Frontend" },
+    { name: "Three.js", icon: "devicon-threejs-original", category: "Frontend" },
+
+    // Backend & Tools
+    { name: "Node.js", icon: "devicon-nodejs-plain colored", category: "Backend & Tools" },
+    { name: "Flask", icon: "devicon-flask-original", category: "Backend & Tools" },
+    { name: "MongoDB", icon: "devicon-mongodb-plain colored", category: "Backend & Tools" },
+    { name: "Git", icon: "devicon-git-plain colored", category: "Backend & Tools" },
+    { name: "Docker", icon: "devicon-docker-plain colored", category: "Backend & Tools" },
+    { name: "Linux", icon: "devicon-linux-plain", category: "Backend & Tools" },
+    { name: "Vercel", icon: "devicon-vercel-original", category: "Backend & Tools" },
+
+    // Offensive Security
+    { name: "Burp Suite", icon: null, emoji: "🔓", category: "Offensive Security" },
+    { name: "Metasploit", icon: null, emoji: "💀", category: "Offensive Security" },
+    { name: "Nmap", icon: null, emoji: "📡", category: "Offensive Security" },
+    { name: "Hydra", icon: null, emoji: "🐍", category: "Offensive Security" },
+    { name: "Wireshark", icon: null, emoji: "🦈", category: "Offensive Security" },
+    { name: "Ghidra", icon: null, emoji: "🔬", category: "Offensive Security" },
+
     // Core Competencies
-    {
-        name: "Web App Pentesting",
-        icon: "/icons/webapp.svg", // Use a generic web icon
-        category: "Core Competencies"
-    },
-    {
-        name: "AD Security",
-        icon: "/icons/activedirectory.svg", // Use a generic server/network icon
-        category: "Core Competencies"
-    },
-    {
-        name: "Digital Forensics",
-        icon: "/icons/forensics.svg", // Use a generic microscope/search icon
-        category: "Core Competencies"
-    },
+    { name: "Web Pentesting", icon: null, emoji: "🌐", category: "Core Competencies" },
+    { name: "AD Security", icon: null, emoji: "🏢", category: "Core Competencies" },
+    { name: "Digital Forensics", icon: null, emoji: "🔍", category: "Core Competencies" },
+    { name: "OSINT", icon: null, emoji: "🕵️", category: "Core Competencies" },
 ];
 
 

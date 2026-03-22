@@ -11,16 +11,6 @@ import {
 } from "../../content_option";
 
 export const About = () => {
-  // This new logic groups your skills by category before rendering
-  const groupedSkills = skills.reduce((acc, skill) => {
-    const { category } = skill;
-    if (!acc[category]) {
-      acc[category] = [];
-    }
-    acc[category].push(skill);
-    return acc;
-  }, {});
-
   return (
     <HelmetProvider>
       <Container className="About-header">
@@ -64,27 +54,34 @@ export const About = () => {
             </Col>
           </Row>
         )}
-        
-        {/* === START: THIS IS THE ENTIRELY REPLACED SKILLS SECTION === */}
+
+        {/* === TECHNOLOGY STACK — Minimal Circle Icons === */}
         <Row className="sec_sp">
-            <Col lg="12">
-                <h3 className="color_sec py-4">Skills & Technologies</h3>
-            </Col>
-            {Object.entries(groupedSkills).map(([category, skillsInCategory]) => (
-                <Col lg="12" key={category}>
-                    <h4 className="skill-category-title">{category}</h4>
-                    <div className="skills-list">
-                        {skillsInCategory.map((skill, i) => (
-                            <div key={i} className="skill-item">
-                                <img src={skill.icon} alt={`${skill.name} logo`} className="skill-icon" />
-                                <span>{skill.name}</span>
-                            </div>
-                        ))}
-                    </div>
-                </Col>
-            ))}
+          <Col lg="12" className="text-center">
+            <h3 className="techstack-title">Technology Stack</h3>
+            <p className="techstack-subtitle">Tools & technologies I work with regularly</p>
+          </Col>
+          <Col lg="12">
+            <div className="techstack-grid">
+              {skills.map((skill, i) => (
+                <div
+                  key={i}
+                  className={`techstack-circle ${i % 3 === 0 ? 'techstack-circle--orbit' : ''}`}
+                  title={skill.name}
+                >
+                  <div className="techstack-circle__inner">
+                    {skill.icon ? (
+                      <i className={skill.icon}></i>
+                    ) : (
+                      <span className="techstack-circle__emoji">{skill.emoji}</span>
+                    )}
+                  </div>
+                  <span className="techstack-circle__label">{skill.name}</span>
+                </div>
+              ))}
+            </div>
+          </Col>
         </Row>
-        {/* === END: REPLACED SKILLS SECTION === */}
 
       </Container>
     </HelmetProvider>
